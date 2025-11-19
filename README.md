@@ -64,3 +64,19 @@ Notes
 - The `http` data source checks the GitHub API endpoint and will return the status code.
 - If you want to use the `github` provider data sources instead, note those can error when a repo
   does not exist — using `http` keeps the plan from failing when a repo is missing.
+
+CI / Security scanning
+- This repository includes a GitHub Actions workflow `.github/workflows/security-scan.yml` that runs
+  a set of security checks on pushes and pull requests:
+  - Trivy `aquasecurity/trivy-action` — scans the filesystem and IaC (Terraform) for CVEs and
+    misconfigurations.
+  - tflint `antonbabenko/tflint-action` — Terraform linter for best practices and security rules.
+  - Checkov `bridgecrew/checkov` — IaC static analysis to catch security policy violations.
+  - Gitleaks `zricethezav/gitleaks-action` — scans for secrets and credentials accidentally left in
+    the repository.
+
+Run locally
+- Trivy (local scan): `trivy fs .` or `trivy config tf_github` to scan Terraform
+- Checkov: `pip install checkov` then `checkov -d tf_github`
+- tflint: `brew install tflint` (macOS) or follow project instructions, then `tflint` in the
+  `tf_github/` directory
