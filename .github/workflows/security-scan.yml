@@ -30,6 +30,9 @@ jobs:
   iac_checks:
     name: IaC & secrets checks (Checkov, tflint, gitleaks)
     runs-on: ubuntu-latest
+    env:
+      GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -66,6 +69,22 @@ jobs:
         run: checkov -d tf_github --compact
 
       - name: Run gitleaks (secrets scan)
+        # gitleaks v2 requires an organization license for org-owned repos. If
+        # the license secret is not present, skip the gitleaks step so the job
+        # doesn't fail (useful for personal accounts or when the license is not
+        # yet available). See README for instructions to obtain a free org
+        # license from https://gitleaks.io/ and add it to repository or org
+        # secrets as `GITLEAKS_LICENSE`.
+        if: ${{ env.GITLEAKS_LICENSE != '' }}
         uses: gitleaks/gitleaks-action@v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ env.GITLEAKS_LICENSE }}
         with:
           args: '--redact'
+
+      - name: Skip gitleaks - license missing
+        if: ${{ env.GITLEAKS_LICENSE == '' }}
+        run: |
+          echo "GITLEAKS_LICENSE secret missing. Skipping gitleaks-action."
+          echo "If you are scanning org-owned repositories, follow README instructions to obtain and add a free license at https://gitleaks.io/"

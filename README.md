@@ -76,6 +76,32 @@ CI / Security scanning
   - Gitleaks `gitleaks/gitleaks-action@v2.3.9` — scans for secrets and credentials accidentally left in
     the repository.
 
+  Gitleaks license (organizations)
+  - If the repository belongs to an organization, Gitleaks Action v2 requires a free license key.
+    Visit https://gitleaks.io/ and click Sign Up to request a free organization license. After you
+    receive the license key, store it as an encrypted GitHub Actions secret:
+
+    - Repo secret (single-repo): Settings → Secrets and variables → Actions → New repository secret
+      - Name: `GITLEAKS_LICENSE`
+      - Value: <paste-license-key-here>
+
+    - Organization-level (all org repos): Organization settings → Secrets and variables → Actions → New
+      organization secret
+      - Name: `GITLEAKS_LICENSE`
+      - Value: <paste-license-key-here>
+
+    Or use the GitHub CLI:
+
+    ```bash
+    # set for the repo
+    gh secret set GITLEAKS_LICENSE -b"<LICENSE_STRING>" -R $OWNER/$REPO
+
+    # set for the organization
+    gh secret set GITLEAKS_LICENSE -b"<LICENSE_STRING>" -O $ORG
+    ```
+
+    Once the secret is set, the workflow will run gitleaks; when missing the workflow now skips the gitleaks step and prints a short message explaining how to obtain and add a license.
+
 Run locally
 - Trivy (local scan): `trivy fs .` or `trivy config tf_github` to scan Terraform
  - After adding or changing providers, run `terraform init` to install or upgrade providers, e.g., `terraform init -upgrade`.
