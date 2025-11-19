@@ -70,9 +70,9 @@ CI / Security scanning
   a set of security checks on pushes and pull requests:
   - Trivy `aquasecurity/trivy-action@0.33.1` — scans the filesystem and IaC (Terraform) for CVEs and
     misconfigurations.
-  - tflint `antonbabenko/tflint-action` — Terraform linter for best practices and security rules.
+  - tflint (`terraform-linters/setup-tflint@v6`) — Terraform linter for best practices and security rules.
   - Checkov `bridgecrew/checkov` — IaC static analysis to catch security policy violations.
-  - Gitleaks `zricethezav/gitleaks-action` — scans for secrets and credentials accidentally left in
+  - Gitleaks `gitleaks/gitleaks-action@v2.3.9` — scans for secrets and credentials accidentally left in
     the repository.
 
 Run locally

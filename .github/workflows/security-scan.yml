@@ -41,11 +41,18 @@ jobs:
           cd tf_github || true
           terraform init -input=false || true
 
-      - name: Run tflint
-        uses: antonbabenko/tflint-action@v1
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v6
         with:
-          config: |
-            # default config is used; to customize add config content here
+          tflint_version: 'latest'
+          cache: true
+
+      - name: Run tflint
+        run: |
+          cd tf_github || true
+          tflint --version
+          tflint --init || true
+          tflint -f compact
 
       - name: Setup Python for checkov
         uses: actions/setup-python@v4
@@ -59,6 +66,6 @@ jobs:
         run: checkov -d tf_github --compact
 
       - name: Run gitleaks (secrets scan)
-        uses: zricethezav/gitleaks-action@v2.8.0
+        uses: gitleaks/gitleaks-action@v2.3.9
         with:
           args: '--redact'
