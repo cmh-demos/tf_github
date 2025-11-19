@@ -29,6 +29,20 @@ terraform plan
 
 3. See `repo_exists_map` in the plan output. You can decode `jsondecode` if needed.
 
+Repo init & push (automated)
+- This scaffold can be pushed to GitHub with the provided `github_creds` token. If the remote
+  repository `tf_github` does not exist it will be created under the configured owner and the
+  scaffold will be pushed as an initial commit. To push locally run the following commands:
+
+```
+# Create the repo on GitHub and push the code
+cd tf_github
+# Make sure github_creds is present and contains a token with repo creation privileges
+bash -c "token=$(python3 -c 'import json,sys;print(json.load(open("github_creds"))["github_token"])'); owner=$(python3 -c 'import json,sys;print(json.load(open("github_creds"))["github_owner"])'); repo=tf_github;\
+curl -H \"Authorization: token $token\" https://api.github.com/repos/$owner/$repo -s -o /dev/null || curl -X POST -H \"Authorization: token $token\" -d '{\"name\":\"'$repo'\",\"private\":false}' https://api.github.com/user/repos;\
+git remote add origin https://github.com/$owner/$repo.git || true; git push https://$token@github.com/$owner/$repo.git main -u; git remote set-url origin https://github.com/$owner/$repo.git"
+```
+
 Create missing repositories
 - When you run `terraform apply`, any repositories that did not exist will be created by the
   `github_repository.create_missing` resource. Created repositories are initialized with a README
