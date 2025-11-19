@@ -10,6 +10,7 @@ How it works
 
 Files
 - `versions.tf`: provider configuration
+  - `hashicorp/http`: required provider used to probe GitHub API endpoints (added to `versions.tf`)
 - `main.tf`: logic to load creds, check repos, and export results
 - `github_repos.json`: sample list of repositories to check
 - `github_creds.sample`: sample credentials; copy to `github_creds` and fill with your details
@@ -77,6 +78,7 @@ CI / Security scanning
 
 Run locally
 - Trivy (local scan): `trivy fs .` or `trivy config tf_github` to scan Terraform
+ - After adding or changing providers, run `terraform init` to install or upgrade providers, e.g., `terraform init -upgrade`.
 - Checkov: `pip install checkov` then `checkov -d tf_github`
 - tflint: `brew install tflint` (macOS) or follow project instructions, then `tflint` in the
   `tf_github/` directory
