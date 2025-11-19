@@ -68,7 +68,7 @@ Notes
 CI / Security scanning
 - This repository includes a GitHub Actions workflow `.github/workflows/security-scan.yml` that runs
   a set of security checks on pushes and pull requests:
-  - Trivy `aquasecurity/trivy-action` — scans the filesystem and IaC (Terraform) for CVEs and
+  - Trivy `aquasecurity/trivy-action@0.33.1` — scans the filesystem and IaC (Terraform) for CVEs and
     misconfigurations.
   - tflint `antonbabenko/tflint-action` — Terraform linter for best practices and security rules.
   - Checkov `bridgecrew/checkov` — IaC static analysis to catch security policy violations.
