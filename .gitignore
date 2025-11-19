@@ -1,0 +1,4 @@
+github_creds
+*.tfstate
+*.tfstate.backup
+.terraform/

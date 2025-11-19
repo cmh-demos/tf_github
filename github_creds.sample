@@ -1,0 +1,6 @@
+{
+  "github_token": "ghp_xxx",
+  "github_owner": "my-github-username"
+}
+
+# Copy this to `github_creds` and fill in your personal access token and owner.
